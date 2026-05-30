@@ -351,6 +351,12 @@ function runAndRender() {
     // the animated chart
     animateChart(result, params);
 
+   // work out the year the median path crosses the goal, and say it plainly
+    const hitYear = yearGoalReached(result, params.goal);
+    document.getElementById('goal-year').textContent = hitYear === null
+      ? "The median path doesn't reach your goal within " + params.years + " years."
+      : "Median path reaches your goal in year " + hitYear + ".";
+
     // percentile table — translate cold numbers into plain English.
     // each row fades in slightly later than the last (staggered reveal).
     const rows = [
