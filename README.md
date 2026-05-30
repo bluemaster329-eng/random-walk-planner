@@ -1,2 +1,4 @@
 # random-walk-planner
-A simulation of the financial market based on the "A Random Walk Down Wall Street" key message that short-term market movements are essentially random and unpredictable. By using randomised possible market futures, the interface provides an accurate representation of financial investment goals in simple terms. It acts as a Monte Carlo simulation which is a mode that repeatedly uses a formula to calculate random selections and represent the randomness of stock market fluctuations outlined in the non-fiction piece. 
+**Purpose**
+The Monte Carlo retirement simulator acts as a model that simulates thousands of possible market futures, providing a more accurate forecast and also showing the variability of this outcome over a single, false forecast
+
