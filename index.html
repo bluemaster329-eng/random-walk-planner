@@ -21,8 +21,6 @@
     - the ANIMATION: paths stream onto the chart one batch per frame using
       requestAnimationFrame, then the fan + median resolve out of the swarm;
       the headline numbers count up to their final value with an easing curve
-
-  No frameworks, no API calls, no backend. Open the file, it runs.
   ============================================================================
 -->
 
@@ -43,6 +41,7 @@
   <div class="grid">
 
     <!-- ================= CONTROLS ================= -->
+    #Layout for the screen itself for user input to affect mathematical calculations 
     <section>
       <div class="panel-title">Your assumptions</div>
 
@@ -82,6 +81,7 @@
     </section>
 
     <!-- ================= RESULTS ================= -->
+    #Output interface 
     <section>
       <div class="panel-title">The odds</div>
 
@@ -109,11 +109,11 @@
 
   <footer>
     <p>
-      <em>Why this works the way it does.</em> Each simulated year draws a random return
-      from a normal distribution centred on your expected return, with spread set by your
-      volatility. That single assumption &mdash; that returns are random draws rather than a
-      knowable number &mdash; is the spine of Malkiel's book. The wide fan you see is not a bug;
-      it is the honest picture of an uncertain future.
+      <em>Underlying Principle</em> Each simulated year draws on a random return, from 
+      a normal distribution of expected returns, with the standard deviation altering 
+      based on the volatility settings. The assumption that this is underpinned by is that
+      returns are random rather than a knowable number, which is the key thesis of Malkiel's
+      book. The wide fan represents the uncertainty of future returns.
     </p>
   </footer>
 
