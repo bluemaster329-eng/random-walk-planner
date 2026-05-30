@@ -322,6 +322,15 @@ function syncLabels() {
   document.getElementById('v-goal').textContent    = money(+document.getElementById('goal').value);
 }
 
+// Walk along the median path year by year and return the first year the
+// balance reaches the goal. Returns null if the goal is never met in time.
+function yearGoalReached(result, goal) {
+  for (let y = 0; y < result.bands.length; y++) {
+    if (result.bands[y].p50 >= goal) return y;
+  }
+  return null; // goal not reached within the simulated years
+}
+
 // run everything and paint the (animated) results
 function runAndRender() {
   const params = readParams();
