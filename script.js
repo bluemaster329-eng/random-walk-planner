@@ -3,7 +3,7 @@
    Math.random() gives a flat (uniform) number in [0,1). Real market returns
    cluster around an average and tail off — a bell curve. The Box-Muller
    transform converts two uniform randoms into one normally-distributed draw.
-   This is the mathematical heart of the whole tool.
+   This is the mathematical centre of the tool
    =========================================================================== */
 function randNormal(mean, stdDev) {
   let u1 = 0, u2 = 0;
@@ -42,7 +42,7 @@ function simulateOnePath(start, contribution, years, meanReturn, volatility) {
    3. TEN THOUSAND LIFETIMES
    Run the single-path simulation many times. For each YEAR we collect every
    simulation's balance, sort them, and read off percentiles. That sorted
-   spread is what makes the "fan" — the cone of possible futures.
+   spread is what makes the "fan", representing the cone of possible futures.
 
    We now ALSO keep a small sample of full paths (samplePaths) so the animation
    can draw individual journeys without trying to render all 10,000 — drawing
@@ -345,11 +345,11 @@ function runAndRender() {
     // percentile table — translate cold numbers into plain English.
     // each row fades in slightly later than the last (staggered reveal).
     const rows = [
-      ['Pessimistic (10th)', result.final.p10, 'A rough run of markets'],
-      ['Below par (25th)',   result.final.p25, 'Worse than typical'],
+      ['Pessimistic (10th)', result.final.p10, 'Poor run of markets'],
+      ['Below par (25th)',   result.final.p25, 'Subpar outcome'],
       ['Median (50th)',      result.final.p50, 'The middle outcome'],
-      ['Above par (75th)',   result.final.p75, 'Better than typical'],
-      ['Optimistic (90th)',  result.final.p90, 'A lucky run of markets'],
+      ['Above par (75th)',   result.final.p75, 'Above average'],
+      ['Optimistic (90th)',  result.final.p90, 'Lucky run of markets'],
     ];
     document.querySelector('#percentiles tbody').innerHTML = rows.map(
       ([label, val, reads], i) =>
