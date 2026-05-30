@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Random Walk Planner</title>
+
+<!--
+  ============================================================================
+  THE RANDOM WALK PLANNER  (v2 — animated)
+  A Monte Carlo retirement simulator built on the central thesis of
+  Burton Malkiel's "A Random Walk Down Wall Street": that short-term price
+  movements are essentially random, so the honest way to plan is to model
+  thousands of possible random futures rather than predict one.
+
+  EVERYTHING here is hand-written plain JavaScript:
+    - the random-number engine (Box-Muller transform for normal draws)
+    - the simulation loop (yearly compounding with random returns)
+    - the percentile aggregation
+    - the chart, drawn manually on a <canvas>, no chart library
+    - the ANIMATION: paths stream onto the chart one batch per frame using
+      requestAnimationFrame, then the fan + median resolve out of the swarm;
+      the headline numbers count up to their final value with an easing curve
+
+  No frameworks, no API calls, no backend. Open the file, it runs.
+  ============================================================================
+-->
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Monte Carlo · A Random Walk Down Wall Street</div>
+    <h1>The Random Walk Planner</h1>
+    <p class="standfirst">
+      Nobody can tell you what the market will do. So instead of one forecast,
+      this runs ten thousand random futures &mdash; and reports the odds.
+    </p>
+  </header>
+
+  <div class="grid">
+
+    <!-- ================= CONTROLS ================= -->
+    <section>
+      <div class="panel-title">Your assumptions</div>
+
+      <div class="field">
+        <label>Starting balance <span class="val" id="v-start">$10,000</span></label>
+        <input type="range" id="start" min="0" max="200000" step="1000" value="10000">
+      </div>
+
+      <div class="field">
+        <label>Annual contribution <span class="val" id="v-contrib">$6,000</span></label>
+        <input type="range" id="contrib" min="0" max="50000" step="500" value="6000">
+      </div>
+
+      <div class="field">
+        <label>Years invested <span class="val" id="v-years">40</span></label>
+        <input type="range" id="years" min="1" max="50" step="1" value="40">
+      </div>
+
+      <div class="field">
+        <label>Expected return <span class="val" id="v-return">7.0%</span></label>
+        <input type="range" id="return" min="0" max="12" step="0.1" value="7">
+        <div class="hint">Long-run average. Malkiel's broad-market figure sits near here.</div>
+      </div>
+
+      <div class="field">
+        <label>Volatility <span class="val" id="v-vol">15.0%</span></label>
+        <input type="range" id="vol" min="1" max="30" step="0.5" value="15">
+        <div class="hint">How wildly returns swing year to year &mdash; the "randomness".</div>
+      </div>
+
+      <div class="field">
+        <label>Goal <span class="val" id="v-goal">$1,000,000</span></label>
+        <input type="range" id="goal" min="100000" max="3000000" step="50000" value="1000000">
+      </div>
+
+      <button class="run" id="run">Run 10,000 simulations</button>
+    </section>
+
+    <!-- ================= RESULTS ================= -->
+    <section>
+      <div class="panel-title">The odds</div>
+
+      <div class="headline-stat">
+        <div class="big-number" id="success">&mdash;</div>
+        <div class="big-label" id="success-label">chance of reaching your goal</div>
+      </div>
+
+      <canvas id="chart" width="1280" height="640" aria-label="Fan chart of simulated portfolio outcomes"></canvas>
+
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--signal-dim)"></i> Range of outcomes (10th–90th percentile)</span>
+        <span><i class="swatch" style="background:var(--ink)"></i> Median path</span>
+        <span><i class="swatch" style="background:var(--good)"></i> Your goal</span>
+      </div>
+
+      <table id="percentiles">
+        <thead>
+          <tr><th>Outcome</th><th>Final balance</th><th>Reads as</th></tr>
+        </thead>
+        <tbody><!-- filled by JS --></tbody>
+      </table>
+    </section>
+  </div>
+
+  <footer>
+    <p>
+      <em>Why this works the way it does.</em> Each simulated year draws a random return
+      from a normal distribution centred on your expected return, with spread set by your
+      volatility. That single assumption &mdash; that returns are random draws rather than a
+      knowable number &mdash; is the spine of Malkiel's book. The wide fan you see is not a bug;
+      it is the honest picture of an uncertain future.
+    </p>
+  </footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
