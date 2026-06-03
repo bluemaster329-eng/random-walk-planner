@@ -124,8 +124,8 @@ function computeScale(result, params) {
 
 function drawAxes(ctx, s, params) {
   // --- gridlines + y-axis dollar labels ---
-  ctx.strokeStyle = '#ddd7ca';
-  ctx.fillStyle = '#5a554c';
+  ctx.strokeStyle = '#dde3e8';
+  ctx.fillStyle = '#5b636b';
   ctx.lineWidth = 1;
   ctx.font = '20px "Times New Roman", Times, serif';
   ctx.textAlign = 'right';
@@ -150,7 +150,7 @@ function drawAxes(ctx, s, params) {
   ctx.setLineDash([10, 8]);
   ctx.moveTo(s.pad.left, s.yAt(params.goal));
   ctx.lineTo(s.W - s.pad.right, s.yAt(params.goal));
-  ctx.strokeStyle = '#3a6b4f';
+  ctx.strokeStyle = '#3f7d6e';
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.setLineDash([]);
@@ -166,7 +166,7 @@ function drawPaths(ctx, s, paths, count) {
     for (let y = 1; y < path.length; y++) ctx.lineTo(s.xAt(y), s.yAt(path[y]));
     // very low alpha so hundreds of overlapping threads build up density,
     // exactly like Malkiel's cloud of possible futures
-    ctx.strokeStyle = 'rgba(180, 84, 31, 0.06)';
+    ctx.strokeStyle = 'rgba(58, 110, 165, 0.06)';
     ctx.stroke();
   }
 }
@@ -183,7 +183,7 @@ function drawFan(ctx, s, result, alpha) {
   for (let y = 1; y <= years; y++) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p90));
   for (let y = years; y >= 0; y--) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p10));
   ctx.closePath();
-  ctx.fillStyle = 'rgba(217, 138, 94, 0.30)';
+  ctx.fillStyle = 'rgba(123, 160, 196, 0.32)';
   ctx.fill();
 
   // --- inner band (25th to 75th) — the "more likely" zone ---
@@ -192,14 +192,14 @@ function drawFan(ctx, s, result, alpha) {
   for (let y = 1; y <= years; y++) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p75));
   for (let y = years; y >= 0; y--) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p25));
   ctx.closePath();
-  ctx.fillStyle = 'rgba(180, 84, 31, 0.22)';
+  ctx.fillStyle = 'rgba(58, 110, 165, 0.20)';
   ctx.fill();
 
   // --- median path (the "typical" outcome) ---
   ctx.beginPath();
   ctx.moveTo(s.xAt(0), s.yAt(result.bands[0].p50));
   for (let y = 1; y <= years; y++) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p50));
-  ctx.strokeStyle = '#1a1814';
+  ctx.strokeStyle = '#1c2024';
   ctx.lineWidth = 3;
   ctx.stroke();
 
