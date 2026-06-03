@@ -3,7 +3,7 @@
    Math.random() gives a flat (uniform) number in [0,1). Real market returns
    cluster around an average and tail off — a bell curve. The Box-Muller
    transform converts two uniform randoms into one normally-distributed draw.
-   This is the mathematical centre of the tool
+   This is the mathematical heart of the whole tool.
    =========================================================================== */
 function randNormal(mean, stdDev) {
   let u1 = 0, u2 = 0;
@@ -42,7 +42,7 @@ function simulateOnePath(start, contribution, years, meanReturn, volatility) {
    3. TEN THOUSAND LIFETIMES
    Run the single-path simulation many times. For each YEAR we collect every
    simulation's balance, sort them, and read off percentiles. That sorted
-   spread is what makes the "fan", representing the cone of possible futures.
+   spread is what makes the "fan" — the cone of possible futures.
 
    We now ALSO keep a small sample of full paths (samplePaths) so the animation
    can draw individual journeys without trying to render all 10,000 — drawing
@@ -124,10 +124,10 @@ function computeScale(result, params) {
 
 function drawAxes(ctx, s, params) {
   // --- gridlines + y-axis dollar labels ---
-  ctx.strokeStyle = '##dde3e8';
-  ctx.fillStyle = '#5b636b';
+  ctx.strokeStyle = '#ddd7ca';
+  ctx.fillStyle = '#5a554c';
   ctx.lineWidth = 1;
-  ctx.font = '20px "IBM Plex Mono", monospace';
+  ctx.font = '20px "Times New Roman", Times, serif';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'middle';
   for (let i = 0; i <= 4; i++) {
@@ -166,7 +166,7 @@ function drawPaths(ctx, s, paths, count) {
     for (let y = 1; y < path.length; y++) ctx.lineTo(s.xAt(y), s.yAt(path[y]));
     // very low alpha so hundreds of overlapping threads build up density,
     // exactly like Malkiel's cloud of possible futures
-    ctx.strokeStyle = 'rgba(58, 110, 165, 0.06)';
+    ctx.strokeStyle = 'rgba(180, 84, 31, 0.06)';
     ctx.stroke();
   }
 }
@@ -183,7 +183,7 @@ function drawFan(ctx, s, result, alpha) {
   for (let y = 1; y <= years; y++) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p90));
   for (let y = years; y >= 0; y--) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p10));
   ctx.closePath();
-  ctx.fillStyle = 'rgba(123, 160, 196, 0.32)';
+  ctx.fillStyle = 'rgba(217, 138, 94, 0.30)';
   ctx.fill();
 
   // --- inner band (25th to 75th) — the "more likely" zone ---
@@ -192,14 +192,14 @@ function drawFan(ctx, s, result, alpha) {
   for (let y = 1; y <= years; y++) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p75));
   for (let y = years; y >= 0; y--) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p25));
   ctx.closePath();
-  ctx.fillStyle = 'rgba(58, 110, 165, 0.20)';
+  ctx.fillStyle = 'rgba(180, 84, 31, 0.22)';
   ctx.fill();
 
   // --- median path (the "typical" outcome) ---
   ctx.beginPath();
   ctx.moveTo(s.xAt(0), s.yAt(result.bands[0].p50));
   for (let y = 1; y <= years; y++) ctx.lineTo(s.xAt(y), s.yAt(result.bands[y].p50));
-  ctx.strokeStyle = '#1c2024';
+  ctx.strokeStyle = '#1a1814';
   ctx.lineWidth = 3;
   ctx.stroke();
 
@@ -322,15 +322,6 @@ function syncLabels() {
   document.getElementById('v-goal').textContent    = money(+document.getElementById('goal').value);
 }
 
-// Walk along the median path year by year and return the first year the
-// balance reaches the goal. Returns null if the goal is never met in time.
-function yearGoalReached(result, goal) {
-  for (let y = 0; y < result.bands.length; y++) {
-    if (result.bands[y].p50 >= goal) return y;
-  }
-  return null; // goal not reached within the simulated years
-}
-
 // run everything and paint the (animated) results
 function runAndRender() {
   const params = readParams();
@@ -351,20 +342,14 @@ function runAndRender() {
     // the animated chart
     animateChart(result, params);
 
-   // work out the year the median path crosses the goal, and say it plainly
-    const hitYear = yearGoalReached(result, params.goal);
-    document.getElementById('goal-year').textContent = hitYear === null
-      ? "The median path doesn't reach your goal within " + params.years + " years."
-      : "Median path reaches your goal in year " + hitYear + ".";
-
     // percentile table — translate cold numbers into plain English.
     // each row fades in slightly later than the last (staggered reveal).
     const rows = [
-      ['Pessimistic (10th)', result.final.p10, 'Poor run of markets'],
-      ['Below par (25th)',   result.final.p25, 'Subpar outcome'],
+      ['Pessimistic (10th)', result.final.p10, 'A rough run of markets'],
+      ['Below par (25th)',   result.final.p25, 'Worse than typical'],
       ['Median (50th)',      result.final.p50, 'The middle outcome'],
-      ['Above par (75th)',   result.final.p75, 'Above average'],
-      ['Optimistic (90th)',  result.final.p90, 'Lucky run of markets'],
+      ['Above par (75th)',   result.final.p75, 'Better than typical'],
+      ['Optimistic (90th)',  result.final.p90, 'A lucky run of markets'],
     ];
     document.querySelector('#percentiles tbody').innerHTML = rows.map(
       ([label, val, reads], i) =>
